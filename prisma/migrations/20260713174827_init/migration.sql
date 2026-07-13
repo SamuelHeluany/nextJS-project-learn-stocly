@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE "Product" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "name" TEXT NOT NULL,
     "price" DECIMAL(10,2) NOT NULL,
     "stock" INTEGER NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE "Product" (
 
 -- CreateTable
 CREATE TABLE "Sale" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "date" TIMESTAMP(3) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -22,9 +22,9 @@ CREATE TABLE "Sale" (
 
 -- CreateTable
 CREATE TABLE "SaleProduct" (
-    "id" TEXT NOT NULL,
-    "saleId" TEXT NOT NULL,
-    "productId" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "saleId" UUID NOT NULL,
+    "productId" UUID NOT NULL,
     "unitPrice" DECIMAL(10,2) NOT NULL,
     "quantity" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

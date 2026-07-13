@@ -14,7 +14,7 @@ datasource db {
 
 // criar tabela Product
 model Product {
-  id           String        @id @default(uuid())
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name         String
   price        Decimal       @db.Decimal(10, 2)
   stock        Int
@@ -24,7 +24,7 @@ model Product {
 }
 
 model Sale {
-  id        String        @id @default(uuid())
+  id        String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   date      DateTime
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
@@ -32,10 +32,10 @@ model Sale {
 }
 
 model SaleProduct {
-  id        String   @id @default(uuid())
-  saleId    String
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  saleId    String   @db.Uuid
   sale      Sale     @relation(fields: [saleId], references: [id])
-  productId String
+  productId String   @db.Uuid
   product   Product  @relation(fields: [productId], references: [id])
   unitPrice Decimal  @db.Decimal(10, 2)
   quantity  Int
