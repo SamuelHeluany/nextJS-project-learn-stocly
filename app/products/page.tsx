@@ -22,7 +22,11 @@ const ProductsPage = async () => {
           Novo Produto
         </Button>
       </div>
-      <DataTable columns={productTableColumns} data={products} />
+      <DataTable
+        columns={productTableColumns}
+        // Quando passar algo não suportado, passar por JSON.parse(JSON.stringify(...)) para evitar erros de serialização
+        data={JSON.parse(JSON.stringify(products))}
+      />
     </div>
   );
 };
