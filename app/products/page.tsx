@@ -1,7 +1,7 @@
 import { productTableColumns } from "./_components/table-columns";
 import { DataTable } from "../_components/ui/data-table";
 import { getProducts } from "../_data-access/product/get-products";
-import AddProductButton from "./_components/add-product-button";
+import AddProductButton from "./_components/create-product-button";
 
 // por padrão a pagina é estatica (apenas renderiza no build), para tornar dinamica, colocar "export const dynamic = 'force-dynamic';" no inicio do arquivo
 // export const dynamic = "force-dynamic";

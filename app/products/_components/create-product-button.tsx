@@ -11,9 +11,8 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/app/_components/ui/dialog";
-import { PlusIcon } from "lucide-react";
+import { Loader2Icon, PlusIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -25,33 +24,20 @@ import {
 } from "@/app/_components/ui/form";
 import { Input } from "@/app/_components/ui/input";
 import { NumericFormat } from "react-number-format";
+import { createProducts } from "@/app/_actions/create-product";
+import { useState } from "react";
+import {
+  createProductSchema,
+  CreateProductSchema,
+} from "@/app/_actions/create-product/schema";
 
-const formSchema = z.object({
-  // Nome do produto é uma string, onde deve ter pelomenos 1 caracter, juntamente com o trim para não aceitar espaços em branco, e a mensagem de erro caso não seja preenchido
-  name: z
-    .string()
-    .trim()
-    .min(1, { message: "O nome do produto é obrigatório." }),
-  // Preço do produto é um número, onde deve ser maior que 0.01, e a mensagem de erro caso não seja preenchido
-  price: z.number().min(0.01, { message: "O preço do produto é obrigatório." }),
-  // Estoque do produto é um número inteiro, onde deve ser maior ou igual a 0, e a mensagem de erro caso não seja preenchido
-  //   o corce converte para number e o positiive garante ser positivo, usado pois ha campos que recebe como string ou outro tipo
-  stock: z
-    .number()
-    .positive({
-      message: "Valor do estoque deve ser positiva.",
-    })
-    .int()
-    .min(0, { message: "O estoque do produto é obrigatório." }),
-});
-
-type FormSchema = z.infer<typeof formSchema>;
-const AddProductButton = () => {
+const CreateProductButton = () => {
+  const [dialogIsOpen, setDialogIsOpen] = useState(false);
   // Chamar o useForm do react-hook-form, passando o zodResolver para validar o formulário com o schema definido acima, e os valores padrões do formulário
-  const form = useForm<FormSchema>({
+  const form = useForm<CreateProductSchema>({
     // shouldUnregister faz com que limpe os imputs quando fechar o modal
     shouldUnregister: true,
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(createProductSchema),
     defaultValues: {
       name: "",
       price: 0,
@@ -59,11 +45,16 @@ const AddProductButton = () => {
     },
   });
 
-  const onSubmit = (data: FormSchema) => {
-    console.log({ data });
+  const onSubmit = async (data: CreateProductSchema) => {
+    try {
+      await createProducts(data);
+      setDialogIsOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
-    <Dialog>
+    <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
       <DialogTrigger asChild>
         <Button className="gap-2">
           <PlusIcon size={20} />
@@ -150,7 +141,18 @@ const AddProductButton = () => {
                   Cancelar
                 </Button>
               </DialogClose>
-              <Button type="submit">Salvar</Button>
+              {/* Vai ser verdadeiro enquanto a server action estiver sendo executada, ou seja, a função submit ser executada */}
+              <Button
+                type="submit"
+                disabled={form.formState.isSubmitting}
+                className="gap-1.5"
+              >
+                {/* se estiver enviando a criação do produto, coloca um spin de carregamento */}
+                {form.formState.isSubmitting && (
+                  <Loader2Icon className="animate-spin" size={16} />
+                )}
+                Salvar
+              </Button>
             </DialogFooter>
           </form>
         </Form>
@@ -159,4 +161,4 @@ const AddProductButton = () => {
   );
 };
 
-export default AddProductButton;
+export default CreateProductButton;
