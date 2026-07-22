@@ -1,17 +1,20 @@
 "use client";
 
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+} from "@/app/_components/ui/alert-dialog";
 import { Badge } from "@/app/_components/ui/badge";
 import { Button } from "@/app/_components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/app/_components/ui/dropdown-menu";
 import { Product } from "@/app/generated/prisma/browser";
+import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
 import {
   CircleIcon,
@@ -20,6 +23,7 @@ import {
   MoreHorizontalIcon,
   TrashIcon,
 } from "lucide-react";
+import DeleteProductDialogContent from "./delete-dialog-content";
 
 const getStatusLabel = (status: string) => {
   if (status === "IN_STOCK") {
@@ -65,22 +69,23 @@ export const productTableColumns: ColumnDef<Product>[] = [
     accessorKey: "actions",
     header: "Actions",
     cell: (row) => {
-      const products = row.row.original;
+      const product = row.row.original;
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost">
-              <MoreHorizontalIcon size={16} />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuGroup>
+        <AlertDialog>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost">
+                <MoreHorizontalIcon size={16} />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
               <DropdownMenuLabel>Ações</DropdownMenuLabel>
+              <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="gap-1.5"
                 // copia o id do produto para o clipboard
                 onClick={() => {
-                  navigator.clipboard.writeText(products.id);
+                  navigator.clipboard.writeText(product.id);
                 }}
               >
                 <ClipboardCopyIcon size={16} />
@@ -90,13 +95,16 @@ export const productTableColumns: ColumnDef<Product>[] = [
                 <EditIcon size={16} />
                 Editar
               </DropdownMenuItem>
-              <DropdownMenuItem className="gap-1.5">
-                <TrashIcon size={16} />
-                Deletar
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              <AlertDialogTrigger asChild>
+                <DropdownMenuItem className="gap-1.5">
+                  <TrashIcon size={16} />
+                  Deletar
+                </DropdownMenuItem>
+              </AlertDialogTrigger>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <DeleteProductDialogContent productId={product.id} />
+        </AlertDialog>
       );
     },
   },

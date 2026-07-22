@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 // @ts-ignore: Side-effect CSS import may not have type declarations
 import "./globals.css";
 import Sidebar from "./_components/sidebar";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"], display: "auto" });
 
@@ -23,6 +24,7 @@ export default function RootLayout({
           <Sidebar />
           {children}
         </div>
+        <Toaster />
       </body>
     </html>
   );
