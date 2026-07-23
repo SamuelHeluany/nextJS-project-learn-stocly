@@ -2,7 +2,8 @@
 
 import z from "zod";
 
-export const createProductSchema = z.object({
+export const upsertProductSchema = z.object({
+  id: z.uuid().optional(),
   // Nome do produto é uma string, onde deve ter pelomenos 1 caracter, juntamente com o trim para não aceitar espaços em branco, e a mensagem de erro caso não seja preenchido
   name: z
     .string()
@@ -21,4 +22,4 @@ export const createProductSchema = z.object({
     .min(0, { message: "O estoque do produto é obrigatório." }),
 });
 
-export type CreateProductSchema = z.infer<typeof createProductSchema>;
+export type UpsertProductSchema = z.infer<typeof upsertProductSchema>;
