@@ -24,19 +24,19 @@ model Product {
 }
 
 model Sale {
-  id        String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  date      DateTime
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
-  products  SaleProduct[]
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  date         DateTime
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  saleProducts SaleProduct[]
 }
 
 model SaleProduct {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   saleId    String   @db.Uuid
-  sale      Sale     @relation(fields: [saleId], references: [id])
+  sale      Sale     @relation(fields: [saleId], references: [id], onDelete: Cascade)
   productId String   @db.Uuid
-  product   Product  @relation(fields: [productId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   unitPrice Decimal  @db.Decimal(10, 2)
   quantity  Int
   createdAt DateTime @default(now())
