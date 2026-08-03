@@ -2,7 +2,16 @@ import { db } from "@/app/_lib/prisma";
 import { Product } from "@/app/generated/prisma/client";
 import "server-only";
 
-export const getProducts = async (): Promise<Product[]> => {
+export interface ProductDto extends Product {
+  status: "IN_STOCK" | "OUT_OF_STOCK";
+}
+
+export const getProducts = async (): Promise<ProductDto[]> => {
   // chamar o banco de dados para buscar os produtos
-  return db.product.findMany({});
+  const products = await db.product.findMany({});
+  // mapear os produtos para o DTO com o status
+  return products.map((product) => ({
+    ...product,
+    status: product.stock <= 0 ? "OUT_OF_STOCK" : "IN_STOCK",
+  }));
 };
