@@ -1,33 +1,10 @@
 "use client";
 
-import {
-  AlertDialog,
-  AlertDialogTrigger,
-} from "@/app/_components/ui/alert-dialog";
 import { Badge } from "@/app/_components/ui/badge";
-import { Button } from "@/app/_components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/app/_components/ui/dropdown-menu";
 import { Product } from "@/app/generated/prisma/browser";
-import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
+
 import { ColumnDef } from "@tanstack/react-table";
-import {
-  CircleIcon,
-  ClipboardCopyIcon,
-  EditIcon,
-  MoreHorizontalIcon,
-  TrashIcon,
-} from "lucide-react";
-import DeleteProductDialogContent from "./delete-dialog-content";
-import { Dialog } from "@/app/_components/ui/dialog";
-import { DialogTrigger } from "@radix-ui/react-dialog";
-import UpsertProductDialogContent from "./upsert-product-dialog";
-import { useState } from "react";
+import { CircleIcon } from "lucide-react";
 import ProductTableDropdownMenu from "./table-dropdown-menu";
 
 const getStatusLabel = (status: string) => {
