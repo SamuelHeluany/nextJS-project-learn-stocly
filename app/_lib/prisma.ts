@@ -8,7 +8,7 @@ declare global {
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 
 const createPrismaClient = () => {
-  return new PrismaClient();
+  return new PrismaClient({ adapter });
 };
 
 let prisma: ReturnType<typeof createPrismaClient>;
