@@ -15,9 +15,6 @@ export const upsertProductSchema = z.object({
   //   o corce converte para number e o positiive garante ser positivo, usado pois ha campos que recebe como string ou outro tipo
   stock: z
     .number()
-    .positive({
-      message: "Valor do estoque deve ser positiva.",
-    })
     .int()
     .min(0, { message: "O estoque do produto é obrigatório." }),
 });
