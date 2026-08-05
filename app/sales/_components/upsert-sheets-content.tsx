@@ -29,7 +29,6 @@ import {
   TableRow,
 } from "@/app/_components/ui/table";
 import { formatCurrency } from "@/app/_helpers/currency";
-import { Product } from "@/app/generated/prisma/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckIcon, PlusIcon } from "lucide-react";
 import { Dispatch, SetStateAction, useMemo, useState } from "react";
@@ -37,7 +36,8 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import UpsertTableDropdownMenu from "./upsert-table-dropdown-menu";
 import { toast } from "sonner";
-import { createSale } from "@/app/_actions/sale/create-sale";
+import { upsertSale } from "@/app/_actions/sale/upsert-sale";
+import { ProductDto } from "@/app/_data-access/product/get-products";
 
 const formSchema = z.object({
   productId: z.uuid({ message: "Produto obrigatório." }),
@@ -47,9 +47,11 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>;
 
 interface UpsertSheetContentProps {
+  saleId?: string;
   productOptions: ComboboxOption[];
-  products: Product[];
+  products: ProductDto[];
   setSheetIsOpen: Dispatch<SetStateAction<boolean>>;
+  defaultSelectedProducts?: SelectedProducts[];
 }
 
 interface SelectedProducts {
@@ -60,12 +62,14 @@ interface SelectedProducts {
 }
 
 const UpsertSheetContent = ({
+  saleId,
   products,
   productOptions,
   setSheetIsOpen,
+  defaultSelectedProducts,
 }: UpsertSheetContentProps) => {
   const [selectedProducts, setSelectedProducts] = useState<SelectedProducts[]>(
-    [],
+    defaultSelectedProducts ?? [],
   );
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -137,8 +141,10 @@ const UpsertSheetContent = ({
     });
   };
   const onSubmitSale = async () => {
+    console.log("saleId:", saleId);
     try {
-      await createSale({
+      await upsertSale({
+        id: saleId,
         products: selectedProducts.map((product) => ({
           id: product.id,
           quantity: product.quantity,
@@ -147,6 +153,7 @@ const UpsertSheetContent = ({
       toast.success("Venda realizada com sucesso!");
       setSheetIsOpen(false);
     } catch (error) {
+      console.error(error);
       toast.error("Erro ao finalizar a venda.");
     }
   };
