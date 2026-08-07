@@ -152,6 +152,8 @@ const UpsertSheetContent = ({
       });
       toast.success("Venda realizada com sucesso!");
       setSheetIsOpen(false);
+      setSelectedProducts([]);
+      form.reset();
     } catch (error) {
       console.error(error);
       toast.error("Erro ao finalizar a venda.");
