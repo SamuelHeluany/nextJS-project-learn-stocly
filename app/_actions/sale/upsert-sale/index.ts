@@ -41,14 +41,6 @@ export const upsertSale = async (data: UpsertSaleSchema) => {
       }
     }
 
-    // await db.$transaction(async (trx) => {
-    //   await trx.sale.delete({
-    //     where: {
-    //       id: data.id,
-    //     },
-    //   });
-    // });
-
     const sale = await trx.sale.create({
       data: {
         date: new Date(),
@@ -90,4 +82,5 @@ export const upsertSale = async (data: UpsertSaleSchema) => {
 
   revalidatePath("/products");
   revalidatePath("/sales");
+  revalidatePath("/");
 };
