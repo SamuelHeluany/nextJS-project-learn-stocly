@@ -34,7 +34,6 @@ export const deleteSale = async ({ id }: DeleteSaleSchema) => {
       });
     }
   });
-  revalidatePath("/sales");
-  revalidatePath("/products");
-  revalidatePath("/");
+  // Aqui ele revalida o layout raiz e todas as paginas que renderizam ele (nesse caso a aplicação inteira) e a Home
+  revalidatePath("/", "layout");
 };

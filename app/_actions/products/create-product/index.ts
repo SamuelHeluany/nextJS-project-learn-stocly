@@ -20,5 +20,6 @@ export const upsertProducts = async (data: UpsertProductSchema) => {
     });
   }
   //   informa pro next para recarregar a pagina quando for adicionado um produto
-  revalidatePath("/products");
+  revalidatePath("/products", "page");
+  revalidatePath("/");
 };

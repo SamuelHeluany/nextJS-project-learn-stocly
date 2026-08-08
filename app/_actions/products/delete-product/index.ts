@@ -11,5 +11,5 @@ export const deleteProduct = async ({ id }: DeleteProductSchema) => {
       id,
     },
   });
-  revalidatePath("/product");
+  revalidatePath("/", "layout");
 };
